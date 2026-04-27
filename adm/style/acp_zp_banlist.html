@@ -1,0 +1,40 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('ACP_ZP_BANLIST_TITLE') }}</h1>
+<p>{{ lang('ACP_ZP_BANLIST_EXPLAIN') }}</p>
+
+<form method="post" action="{{ U_ACTION }}">
+    <fieldset>
+        <legend>{{ lang('ACP_ZP_BANLIST_MANAGE') }}</legend>
+        <dl>
+            <dt>
+                <label for="zp_banlist_per_page">{{ lang('ACP_ZP_BANLIST_PER_PAGE') }}{{ lang('COLON') }}</label>
+                <br><span>{{ lang('ACP_ZP_BANLIST_PER_PAGE_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <input type="number" id="zp_banlist_per_page" name="zp_banlist_per_page"
+                       value="{{ ZP_BANLIST_PER_PAGE }}" min="1" max="200" size="5" />
+            </dd>
+        </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_ZP_BANLIST_PERMISSIONS') }}</legend>
+        <dl>
+            <dt>
+                <span class="label">{{ lang('ACP_ZP_BANLIST_MOD_EDIT') }}</span>
+                <br><span>{{ lang('ACP_ZP_BANLIST_MOD_EDIT_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <label class="radio"><input type="radio" name="zp_banlist_mod_edit" value="1"{% if ZP_BANLIST_MOD_EDIT %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>&nbsp;
+                <label class="radio"><input type="radio" name="zp_banlist_mod_edit" value="0"{% if not ZP_BANLIST_MOD_EDIT %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+            </dd>
+        </dl>
+    </fieldset>
+    <fieldset class="submit-buttons">
+        <input class="button1" type="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+        <input class="button2" type="reset"  name="reset"  value="{{ lang('RESET') }}" />
+        {{ S_FORM_TOKEN }}
+    </fieldset>
+</form>
+
+{% INCLUDE 'overall_footer.html' %}

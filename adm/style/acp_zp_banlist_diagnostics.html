@@ -1,0 +1,31 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('ACP_ZP_BANLIST_DIAG_TITLE') }}</h1>
+<p>{{ lang('ACP_ZP_BANLIST_DIAG_EXPLAIN') }}</p>
+
+{% if ZP_BANLIST_DIAG_ALL_OK %}
+    <p style="color:green;font-weight:bold;">{{ lang('ACP_ZP_BANLIST_DIAG_BANNER_OK') }}</p>
+{% else %}
+    <p style="color:red;font-weight:bold;">{{ lang('ACP_ZP_BANLIST_DIAG_BANNER_ERR') }}</p>
+{% endif %}
+
+<table class="table1" style="width:100%;">
+    <thead>
+        <tr>
+            <th>{{ lang('ACP_ZP_BANLIST_DIAG_CHECK') }}</th>
+            <th>{{ lang('ACP_ZP_BANLIST_DIAG_STATUS') }}</th>
+            <th>{{ lang('ACP_ZP_BANLIST_DIAG_DETAIL') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for check in loops.checks %}
+        <tr>
+            <td>{{ check.LABEL }}</td>
+            <td>{% if check.STATUS %}✅{% else %}❌{% endif %}</td>
+            <td>{{ check.DETAIL }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% INCLUDE 'overall_footer.html' %}

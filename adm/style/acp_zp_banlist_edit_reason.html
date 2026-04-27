@@ -1,0 +1,27 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('ACP_ZP_BANLIST_EDIT_REASON_TITLE') }}</h1>
+<p>{{ lang('ACP_ZP_BANLIST_EDIT_REASON_EXPLAIN', BAN_USERNAME) }}</p>
+
+<form method="post" action="{{ U_ACTION }}">
+    <fieldset>
+        <legend>{{ lang('ACP_ZP_BANLIST_EDIT_REASON_LEGEND') }}</legend>
+        <dl>
+            <dt>
+                <label for="ban_give_reason">{{ lang('ACP_ZP_BANLIST_GIVE_REASON') }}{{ lang('COLON') }}</label>
+                <br><span>{{ lang('ACP_ZP_BANLIST_GIVE_REASON_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <textarea id="ban_give_reason" name="ban_give_reason"
+                          rows="4" cols="60" class="inputbox">{{ BAN_GIVE_REASON }}</textarea>
+            </dd>
+        </dl>
+    </fieldset>
+    <fieldset class="submit-buttons">
+        <input class="button1" type="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+        <input class="button2" type="reset"  name="reset"  value="{{ lang('RESET') }}" />
+        {{ S_FORM_TOKEN }}
+    </fieldset>
+</form>
+
+{% INCLUDE 'overall_footer.html' %}

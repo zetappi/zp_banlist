@@ -1,0 +1,22 @@
+marcozp_zp_banlist_page:
+    path: /zp_banlist
+    defaults:
+        _controller: marcozp.zp_banlist.controller:view
+        filter_type: ''
+        filter_user: ''
+        sort_field: ban_start
+        sort_order: DESC
+        start: 0
+    methods: [GET]
+
+marcozp_zp_banlist_save_reason:
+    path: /zp_banlist/save_reason
+    defaults:
+        _controller: marcozp.zp_banlist.controller:save_reason
+    methods: [POST]
+
+marcozp_zp_banlist_revoke_ban:
+    path: /zp_banlist/revoke_ban
+    defaults:
+        _controller: marcozp.zp_banlist.controller:revoke_ban
+    methods: [POST]

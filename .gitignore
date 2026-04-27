@@ -1,0 +1,4 @@
+# Agent/project management files
+.agents/
+banlist-project.md
+EXTENSION_METADATA.md

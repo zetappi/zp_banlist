@@ -1,0 +1,27 @@
+{
+    "name": "marcozp/zp_banlist",
+    "type": "phpbb-extension",
+    "description": "Displays a paginated, filterable and sortable ban list with ban date, expiry and reason",
+    "version": "1.0.0",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "marcozp"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.3",
+        "composer/installers": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "marcozp\\zp_banlist\\": ""
+        }
+    },
+    "extra": {
+        "display-name": "ZP BanList",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.3.0"
+        }
+    }
+}

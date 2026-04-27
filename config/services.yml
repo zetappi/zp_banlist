@@ -1,0 +1,24 @@
+services:
+    marcozp.zp_banlist.listener:
+        class: marcozp\zp_banlist\event\main_listener
+        arguments:
+            - '@template'
+            - '@language'
+            - '@config'
+            - '@controller.helper'
+            - '@user'
+        tags:
+            - { name: event.listener }
+
+    marcozp.zp_banlist.controller:
+        class: marcozp\zp_banlist\controller\main_controller
+        arguments:
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+            - '@config'
+            - '@request'
+            - '@dbal.conn'
+            - '@user'
+            - '@auth'
+            - '@log'
