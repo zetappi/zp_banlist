@@ -1,0 +1,10 @@
+<!-- IF postrow.S_ZP_USER_BANNED -->
+<dd class="profile-posts">
+	<div class="zp-ban-badge">
+		<strong>{L_ZP_BANLIST_USER_BANNED}</strong>
+		<span><!-- IF postrow.ZP_BAN_END == 0 -->{L_ZP_BANLIST_PERMANENT_UC}<!-- ELSE -->{L_ZP_BANLIST_EXPIRY}{L_COLON} {postrow.ZP_BAN_END_DISPLAY}<!-- ENDIF --></span>
+		<!-- IF postrow.ZP_BAN_END != 0 --><small class="zp-ban-badge-date">({postrow.ZP_BAN_END_DATE})</small><!-- ENDIF -->
+	</div>
+</dd>
+<!-- ENDIF -->
+

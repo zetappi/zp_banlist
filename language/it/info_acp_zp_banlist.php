@@ -51,4 +51,5 @@ $lang = array_merge($lang, [
     'LOG_ZP_BANLIST_REASON_EDITED'          => '<strong>Messaggio di ban modificato</strong> per l\'utente %1$s — messaggio: %2$s',
     'LOG_ZP_BANLIST_REASON_AND_END_EDITED'  => '<strong>Messaggio e scadenza ban modificati</strong> per l\'utente %1$s — messaggio: %2$s — scadenza: %3$s &rarr; %4$s',
     'LOG_ZP_BANLIST_REVOKED'                => '<strong>Ban interrotto</strong> per l\'utente %1$s',
+    'LOG_ZP_BANLIST_QUICK_BAN'             => '<strong>Ban rapido</strong> assegnato all\'utente %1$s — motivazione: %2$s',
 ]);

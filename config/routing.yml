@@ -20,3 +20,12 @@ marcozp_zp_banlist_revoke_ban:
     defaults:
         _controller: marcozp.zp_banlist.controller:revoke_ban
     methods: [POST]
+
+marcozp_zp_banlist_quick_ban:
+    path: /zp_banlist/quick-ban/{user_id}/{post_id}
+    defaults:
+        _controller: marcozp.zp_banlist.controller:quick_ban
+    methods: [GET, POST]
+    requirements:
+        user_id: \d+
+        post_id: \d+

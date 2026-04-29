@@ -103,9 +103,11 @@ ext/marcozp/zp_banlist/
 └── styles/all/
     ├── template/
     │   ├── zp_banlist_body.html    # Ban list page template
+    │   ├── zp_banlist_quick_ban.html  # Quick ban modal template
     │   └── event/
     │       ├── overall_header_head_append.html   # Flatpickr asset injection
-    │       └── overall_header_navigation_append.html  # Navigation menu link
+    │       ├── overall_header_navigation_append.html  # Navigation menu link
+    │       └── viewtopic_body_post_buttons_after.html  # Quick ban button in posts
     └── theme/
         ├── zp_banlist.css          # Extension stylesheet
         ├── flatpickr.min.css       # Flatpickr (bundled)

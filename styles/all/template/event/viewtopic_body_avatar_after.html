@@ -1,0 +1,23 @@
+{% if postrow.S_ZP_USER_BANNED and S_ZP_HIDE_BANNED_AVATAR %}
+{% if U_ZP_BANNED_AVATAR %}
+<script>
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        var postDiv = document.getElementById('p{{ postrow.POST_ID }}');
+        if (!postDiv) return;
+        var avatarImg = postDiv.querySelector('.avatar-container img');
+        if (avatarImg) {
+            avatarImg.src = '{{ U_ZP_BANNED_AVATAR }}';
+            avatarImg.style.display = '';
+        }
+    });
+})();
+</script>
+{% else %}
+<style>
+#p{{ postrow.POST_ID }} .postprofile .avatar-container img {
+    display: none !important;
+}
+</style>
+{% endif %}
+{% endif %}

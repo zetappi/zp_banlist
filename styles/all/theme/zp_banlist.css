@@ -1,10 +1,68 @@
 /* ZP BanList — Stylesheet */
 
-/* ── Wrapper ─────────────────────────────────────────── */
+/* ── Color Palette Standard ───────────────────────────────────── */
+:root {
+    --zp-bg-light: #f5f5f5;
+    --zp-bg-medium: #e0e0e0;
+    --zp-bg-dark: #444444;
+    --zp-blue: #007bff;
+    --zp-blue-hover: #0056b3;
+    --zp-green: #28a745;
+    --zp-green-hover: #218838;
+    --zp-yellow: #ffc107;
+    --zp-yellow-hover: #e0a800;
+    --zp-red: #dc3545;
+    --zp-red-hover: #c82333;
+    --zp-text-dark: #333333;
+    --zp-text-light: #ffffff;
+    --zp-border: #cccccc;
+}
+
+/* ── Ban Badge in Post Profile ── */
+dd.profile-posts .zp-ban-badge,
+.zp-ban-badge {
+    background-color: #c0392b !important;
+    background: #c0392b !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 4px 0;
+    color: #ffffff !important;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.4;
+    box-shadow: 0 0 0 1px #c0392b;
+}
+
+.zp-ban-badge strong {
+    display: block;
+    color: #ffffff !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.zp-ban-badge span {
+    display: block;
+    color: #ffffff !important;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.zp-ban-badge-date {
+    display: block;
+    color: #ffffff !important;
+    font-size: 9px;
+    opacity: 0.75;
+    margin-top: 2px;
+    font-weight: normal;
+}
+
+/* ── Ban List Wrapper ── */
 #zp-banlist-wrapper {
     margin: 10px 0;
-    background-color: #dddddd;
-    border-radius: 4px;
+    background-color: var(--zp-bg-light);
+    border-radius: 8px;
 }
 
 /* ── Filter bar ──────────────────────────────────────── */
@@ -15,9 +73,9 @@
     gap: 8px 16px;
     padding: 10px 14px;
     margin-bottom: 0;
-    background-color: #cccccc;
-    border-radius: 4px 4px 0 0;
-    border-bottom: 1px solid #aaaaaa;
+    background-color: var(--zp-bg-medium);
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid var(--zp-border);
 }
 
 .zp-banlist-toolbar .zp-filter-group {
@@ -28,7 +86,7 @@
 
 .zp-banlist-toolbar label {
     font-weight: 600;
-    color: #333333;
+    color: var(--zp-text-dark);
     white-space: nowrap;
     margin-right: 4px;
 }
@@ -36,32 +94,30 @@
 /* Filter type pills */
 .zp-filter-pill {
     display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
-    color: #333333;
-    background-color: #dddddd;
-    border: 1px solid #999999;
+    color: var(--zp-text-light);
+    background-color: var(--zp-blue);
+    border: 1px solid var(--zp-blue);
     transition: background-color 0.15s, color 0.15s;
 }
 .zp-filter-pill:hover {
-    background-color: #1a6faf;
-    color: #ffffff;
-    border-color: #1a6faf;
+    background-color: var(--zp-blue-hover);
+    border-color: var(--zp-blue-hover);
     text-decoration: none;
 }
 .zp-filter-pill.active {
-    background-color: #1a6faf;
-    color: #ffffff;
-    border-color: #1a6faf;
+    background-color: var(--zp-blue-hover);
+    border-color: var(--zp-blue-hover);
 }
 
 /* Search input */
 .zp-search-input {
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: 8px;
     border: 1px solid #999999;
     background-color: #ffffff;
     color: #000000;
@@ -69,24 +125,24 @@
 }
 .zp-search-input:focus {
     outline: none;
-    border-color: #1a6faf;
+    border-color: var(--zp-blue);
 }
 
 /* Search button */
 .zp-search-btn {
     padding: 4px 12px;
-    border-radius: 4px;
-    border: 1px solid #1a6faf;
-    background-color: #1a6faf;
-    color: #ffffff;
+    border-radius: 20px;
+    border: 1px solid var(--zp-blue);
+    background-color: var(--zp-blue);
+    color: var(--zp-text-light);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.15s;
 }
 .zp-search-btn:hover {
-    background-color: #155a8a;
-    border-color: #155a8a;
+    background-color: var(--zp-blue-hover);
+    border-color: var(--zp-blue-hover);
 }
 
 /* ── Table ───────────────────────────────────────────── */
@@ -94,42 +150,42 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
-    background-color: #dddddd;
+    background-color: var(--zp-bg-light);
 }
 
 .zp-banlist-table thead tr {
-    background-color: #bbbbbb;
+    background-color: var(--zp-bg-medium);
 }
 
 .zp-banlist-table th {
     padding: 9px 12px;
     text-align: left;
-    color: #000000;
+    color: var(--zp-text-dark);
     font-weight: 700;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     white-space: nowrap;
-    border-bottom: 2px solid #999999;
+    border-bottom: 2px solid var(--zp-border);
 }
 
 /* Zebra striping — classi esplicite per evitare problemi con righe nascoste */
 .zp-banlist-table tbody tr.zp-row-odd td {
-    background-color: #dddddd;
+    background-color: var(--zp-bg-light);
 }
 .zp-banlist-table tbody tr.zp-row-even td {
-    background-color: #bbbbbb;
+    background-color: #e8e8e8;
 }
 
 .zp-banlist-table td {
     padding: 8px 12px;
     vertical-align: middle;
-    border-bottom: 1px solid #aaaaaa;
-    color: #000000;
+    border-bottom: 1px solid var(--zp-border);
+    color: var(--zp-text-dark);
 }
 
 .zp-banlist-table tbody tr:hover td {
-    background-color: #c8dff0 !important;
+    background-color: #e3f2fd !important;
 }
 
 /* Sort arrows in <th> */
@@ -148,20 +204,20 @@
     justify-content: center;
     width: 18px;
     height: 14px;
-    border-radius: 3px;
+    border-radius: 4px;
     text-decoration: none;
     color: #555555;
     font-size: 10px;
     transition: background-color 0.12s, color 0.12s;
 }
 .zp-sort-btn:hover {
-    background-color: #1a6faf;
-    color: #ffffff;
+    background-color: var(--zp-blue);
+    color: var(--zp-text-light);
     text-decoration: none;
 }
 .zp-sort-btn.active {
-    background-color: #1a6faf;
-    color: #ffffff;
+    background-color: var(--zp-blue);
+    color: var(--zp-text-light);
 }
 
 /* Type badge */
@@ -231,7 +287,7 @@
 .zp-date-input {
     padding: 5px 8px;
     border: 1px solid #999999;
-    border-radius: 4px;
+    border-radius: 8px;
     background-color: #ffffff;
     color: #000000;
     font-size: 13px;
@@ -256,9 +312,9 @@
     width: 100%;
     padding: 6px 8px;
     border: 1px solid #999999;
-    border-radius: 4px;
-    background-color: #ffffff;
-    color: #000000;
+    border-radius: 8px;
+    background-color: #ffffff !important;
+    color: #000000 !important;
     font-size: 13px;
     resize: vertical;
     box-sizing: border-box;
@@ -294,49 +350,51 @@
 }
 .zp-save-btn:disabled,
 .zp-cancel-btn:disabled,
-.zp-revoke-btn:disabled {
+.zp-revoke-btn:disabled,
+.zp-quick-ban-submit:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
-/* Salva — verde pieno */
+/* Salva — verde conferma */
 .zp-save-btn {
-    background-color: #2e7d32;
-    border-color: #2e7d32;
-    color: #ffffff;
+    background-color: var(--zp-green);
+    border-color: var(--zp-green);
+    color: var(--zp-text-light);
 }
 .zp-save-btn:hover:not(:disabled) {
-    background-color: #1b5e20;
-    border-color: #1b5e20;
-    box-shadow: 0 2px 6px rgba(46,125,50,0.35);
+    background-color: var(--zp-green-hover);
+    border-color: var(--zp-green-hover);
+    box-shadow: 0 2px 6px rgba(40,167,69,0.35);
 }
 
-/* Annulla — azzurro outline */
+/* Annulla — giallo */
 .zp-cancel-btn {
-    background-color: #ffffff;
-    border-color: #1a6faf;
-    color: #1a6faf;
+    background-color: var(--zp-yellow);
+    border-color: var(--zp-yellow);
+    color: var(--zp-text-dark);
 }
 .zp-cancel-btn:hover:not(:disabled) {
-    background-color: #e8f2fa;
-    box-shadow: 0 2px 6px rgba(26,111,175,0.2);
+    background-color: var(--zp-yellow-hover);
+    border-color: var(--zp-yellow-hover);
+    box-shadow: 0 2px 6px rgba(255,193,7,0.35);
 }
 
-/* Interrompi ban — rosso outline, separato a destra */
+/* Interrompi ban — rosso pericoloso */
 .zp-revoke-btn {
-    background-color: #ffffff;
-    border-color: #c62828;
-    color: #c62828;
+    background-color: var(--zp-red);
+    border-color: var(--zp-red);
+    color: var(--zp-text-light);
     margin-left: auto;
 }
 .zp-revoke-btn:hover:not(:disabled) {
-    background-color: #c62828;
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(198,40,40,0.35);
+    background-color: var(--zp-red-hover);
+    border-color: var(--zp-red-hover);
+    box-shadow: 0 2px 6px rgba(220,53,69,0.35);
 }
 .zp-edit-msg {
     font-size: 12px;
-    color: #1a6faf;
+    color: var(--zp-blue);
 }
 .zp-edit-msg-error {
     color: #aa0000;
@@ -344,11 +402,11 @@
 
 /* Flatpickr overrides */
 .flatpickr-calendar { font-size: 13px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-.flatpickr-day.selected, .flatpickr-day.selected:hover { background: #1a6faf; border-color: #1a6faf; }
-.flatpickr-day:hover { background: #e8f2fa; }
+.flatpickr-day.selected, .flatpickr-day.selected:hover { background: var(--zp-blue); border-color: var(--zp-blue); }
+.flatpickr-day:hover { background: #e3f2fd; }
 .flatpickr-time { height: 52px; }
 .flatpickr-time input { font-size: 16px; font-weight: 600; }
-.flatpickr-time input:hover, .flatpickr-time input:focus { background: #e8f2fa; }
+.flatpickr-time input:hover, .flatpickr-time input:focus { background: #e3f2fd; }
 .flatpickr-time .arrowUp,
 .flatpickr-time .arrowDown {
     height: 26px;
@@ -371,7 +429,7 @@
     justify-content: center;
     width: 26px;
     height: 26px;
-    border-radius: 4px;
+    border-radius: 8px;
     text-decoration: none;
     color: #555555;
     border: 1px solid #aaaaaa;
@@ -379,19 +437,19 @@
     transition: background-color 0.12s, color 0.12s, border-color 0.12s;
 }
 .zp-edit-btn:hover {
-    background-color: #1a6faf;
-    color: #ffffff;
-    border-color: #1a6faf;
+    background-color: var(--zp-blue);
+    color: var(--zp-text-light);
+    border-color: var(--zp-blue);
     text-decoration: none;
 }
 
 /* No results row */
 .zp-no-results td {
     text-align: center;
-    color: #555555;
+    color: var(--zp-text-dark);
     padding: 24px;
     font-style: italic;
-    background-color: #dddddd !important;
+    background-color: var(--zp-bg-light) !important;
 }
 
 /* ── Pagination ──────────────────────────────────────── */
@@ -401,7 +459,7 @@
     justify-content: center;
     gap: 12px;
     padding: 14px 0 4px;
-    background-color: #dddddd;
+    background-color: var(--zp-bg-light);
 }
 
 .zp-page-btn {
@@ -409,24 +467,24 @@
     align-items: center;
     gap: 5px;
     padding: 5px 14px;
-    border-radius: 4px;
+    border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
     text-decoration: none;
-    color: #ffffff;
-    background-color: #1a6faf;
-    border: 1px solid #1a6faf;
+    color: var(--zp-text-light);
+    background-color: var(--zp-blue);
+    border: 1px solid var(--zp-blue);
     transition: background-color 0.15s;
 }
 .zp-page-btn:hover {
-    background-color: #155a8a;
-    border-color: #155a8a;
+    background-color: var(--zp-blue-hover);
+    border-color: var(--zp-blue-hover);
     text-decoration: none;
-    color: #ffffff;
+    color: var(--zp-text-light);
 }
 
 .zp-page-info {
-    color: #333333;
+    color: var(--zp-text-dark);
     font-size: 13px;
 }
 
@@ -557,4 +615,333 @@
         flex-direction: column;
         gap: 8px;
     }
+}
+
+/* ── Quick Ban Form ───────────────────────────────────── */
+#zp-quick-ban-modal {
+    background-color: var(--zp-bg-dark) !important;
+}
+
+#zp-quick-ban-modal .inner {
+    background-color: var(--zp-bg-dark);
+}
+
+#zp-quick-ban-modal .corners-top,
+#zp-quick-ban-modal .corners-bottom {
+    background-color: var(--zp-bg-dark);
+}
+
+#zp-quick-ban-modal .header {
+    background-color: #333333;
+}
+
+#zp-quick-ban-modal .header dt,
+#zp-quick-ban-modal .header strong {
+    color: #ffffff !important;
+}
+
+#zp-quick-ban-modal fieldset {
+    color: #ffffff;
+}
+
+#zp-quick-ban-modal dt label,
+#zp-quick-ban-modal dd,
+#zp-quick-ban-modal textarea,
+#zp-quick-ban-modal input[type="text"],
+#zp-quick-ban-modal input[type="checkbox"] + label {
+    color: #ffffff !important;
+}
+
+#zp-quick-ban-modal textarea,
+#zp-quick-ban-modal input[type="text"] {
+    background-color: #333333;
+    border-color: var(--zp-border);
+    color: var(--zp-text-light);
+}
+
+#zp-quick-ban-modal textarea:focus,
+#zp-quick-ban-modal input[type="text"]:focus {
+    border-color: var(--zp-blue);
+    outline: none;
+}
+
+#zp-quick-ban-modal input[type="checkbox"] {
+    accent-color: #ffffff;
+}
+
+/* Pulsanti durata preimpostata - blu con bordi arrotondati */
+.zp-quick-ban-preset {
+    background-color: var(--zp-blue) !important;
+    color: var(--zp-text-light) !important;
+    border: 1px solid var(--zp-blue) !important;
+    border-radius: 20px !important;
+    padding: 6px 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background-color 0.15s;
+}
+
+.zp-quick-ban-preset:hover {
+    background-color: var(--zp-blue-hover) !important;
+    border-color: var(--zp-blue-hover) !important;
+}
+
+/* Pulsante invio - rosso pericoloso */
+.zp-quick-ban-submit {
+    background-color: var(--zp-red) !important;
+    color: var(--zp-text-light) !important;
+    border: 1px solid var(--zp-red) !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    padding: 6px 16px !important;
+}
+
+.zp-quick-ban-submit:hover {
+    background-color: var(--zp-red-hover) !important;
+    border-color: var(--zp-red-hover) !important;
+}
+
+/* Pulsante annulla - giallo */
+.zp-quick-ban-cancel {
+    background-color: var(--zp-yellow) !important;
+    color: var(--zp-text-dark) !important;
+    border: 1px solid var(--zp-yellow) !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    padding: 6px 16px !important;
+}
+
+.zp-quick-ban-cancel:hover {
+    background-color: var(--zp-yellow-hover) !important;
+    border-color: var(--zp-yellow-hover) !important;
+}
+
+/* ── Quick Ban Success Modal ──────────────────────────── */
+#zp-ban-success-modal {
+    background-color: var(--zp-bg-dark) !important;
+}
+
+#zp-ban-success-modal .inner {
+    background-color: var(--zp-bg-dark);
+}
+
+#zp-ban-success-modal .corners-top,
+#zp-ban-success-modal .corners-bottom {
+    background-color: var(--zp-bg-dark);
+}
+
+#zp-ban-success-modal .header {
+    background-color: #333333;
+}
+
+#zp-ban-success-modal .header dt,
+#zp-ban-success-modal .header strong {
+    color: #ffffff !important;
+}
+
+#zp-ban-success-modal p {
+    color: #ffffff !important;
+}
+
+#zp-countdown {
+    color: var(--zp-green);
+}
+
+/* ── Quick Ban Success Badges ─────────────────────────── */
+.zp-ban-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #000000;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.zp-ban-badge-username {
+    color: #ffffff;
+}
+
+.zp-ban-badge-expiry {
+    color: #ffff00;
+}
+
+.zp-ban-badge-remaining {
+    color: #ffffff;
+}
+
+.zp-ban-badge-permanent {
+    color: #ff0000;
+}
+
+/* ── Skip Button ─────────────────────────────────────────── */
+.zp-skip-button {
+    background-color: var(--zp-blue) !important;
+    color: var(--zp-text-light) !important;
+    border: 1px solid var(--zp-blue) !important;
+    border-radius: 20px !important;
+    padding: 6px 20px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    margin-top: 10px;
+    transition: background-color 0.15s;
+}
+
+.zp-skip-button:hover {
+    background-color: var(--zp-blue-hover) !important;
+    border-color: var(--zp-blue-hover) !important;
+}
+
+/* ── Disabled Ban Button ─────────────────────────────────── */
+.zp-ban-button-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    background-color: #666666 !important;
+}
+
+/* ── Mobile: Hide external quickban button, it's in dropdown menu ── */
+@media (max-width: 700px) {
+    #viewtopic .post-buttons .button[href*="/quick-ban/"] {
+        display: none !important;
+    }
+    #viewtopic .post-buttons .zp-ban-button-disabled {
+        display: none !important;
+    }
+}
+
+/* ── Confirm Modal ────────────────────────────────────────── */
+.zp-confirm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.zp-confirm-content {
+    background-color: #333333;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--zp-border);
+}
+
+.zp-confirm-header {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: var(--zp-text-light);
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--zp-border);
+    padding-bottom: 15px;
+}
+
+.zp-confirm-body {
+    color: var(--zp-text-light);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.zp-confirm-body p {
+    margin: 12px 0;
+    font-size: 1.1em;
+}
+
+.zp-confirm-username {
+    display: inline-block;
+    padding: 8px 20px;
+    background-color: #000000;
+    color: var(--zp-text-light);
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.zp-confirm-duration-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background-color: #000000;
+    color: var(--zp-yellow);
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.zp-confirm-question {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--zp-text-light);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.zp-confirm-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.zp-confirm-ok {
+    background-color: var(--zp-red) !important;
+    color: var(--zp-text-light) !important;
+    border: 1px solid var(--zp-red) !important;
+    border-radius: 20px !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    font-size: 16px;
+    flex: 1;
+}
+
+.zp-confirm-ok:hover {
+    background-color: var(--zp-red-hover) !important;
+    border-color: var(--zp-red-hover) !important;
+}
+
+.zp-confirm-cancel {
+    background-color: var(--zp-yellow) !important;
+    color: var(--zp-text-dark) !important;
+    border: 1px solid var(--zp-yellow) !important;
+    border-radius: 20px !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    font-size: 16px;
+    flex: 1;
+}
+
+.zp-confirm-cancel:hover {
+    background-color: var(--zp-yellow-hover) !important;
+    border-color: var(--zp-yellow-hover) !important;
+}
+
+/* ── Revoke Modal Badges ───────────────────────────────────── */
+#zp-revoke-modal .zp-confirm-username {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #000000;
+    color: var(--zp-text-light);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+#zp-revoke-modal .zp-confirm-duration-badge {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: var(--zp-yellow);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.3em;
 }

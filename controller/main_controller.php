@@ -62,6 +62,7 @@ class main_controller
         // Filter params
         $filter_type   = $this->request->variable('filter_type', '');   // 'temporary' | 'permanent' | ''
         $filter_user   = $this->request->variable('filter_user', '', true);
+        $filter_age    = $this->request->variable('filter_age', '5years');   // '5years' | 'all'
         $sort_field    = $this->request->variable('sort_field', 'ban_start');
         $sort_order    = $this->request->variable('sort_order', 'DESC');
 
@@ -84,6 +85,12 @@ class main_controller
         else if ($filter_type === 'permanent')
         {
             $where_parts[] = 'b.ban_end = 0';
+        }
+
+        if ($filter_age === '5years')
+        {
+            $five_years_ago = $now - (5 * 365 * 24 * 60 * 60);
+            $where_parts[] = 'b.ban_start >= ' . $five_years_ago;
         }
 
         if ($filter_user !== '')
@@ -120,6 +127,20 @@ class main_controller
                 : $this->user->format_date($row['ban_end']);
 
             $ban_end_raw = ($row['ban_end'] == 0) ? '' : date('Y-m-d\TH:i', (int) $row['ban_end']);
+
+            // Extract post_id from ban_give_reason (format: "Ban assiociato al tuo post: %d")
+            $post_id = 0;
+            $post_url = '';
+            if ($row['ban_give_reason']) {
+                if (preg_match('/post: (\d+)/i', $row['ban_give_reason'], $matches)) {
+                    $post_id = (int) $matches[1];
+                } elseif (preg_match('/post #(\d+)/i', $row['ban_give_reason'], $matches)) {
+                    $post_id = (int) $matches[1];
+                }
+                if ($post_id) {
+                    $post_url = generate_board_url(false) . '/viewtopic.php?p=' . $post_id . '#p' . $post_id;
+                }
+            }
 
             // Calculate remaining time for temporary bans
             $ban_remaining = '';
@@ -158,6 +179,9 @@ class main_controller
                 'BAN_GIVE_REASON'=> $row['ban_give_reason'],
                 'IS_PERMANENT'   => ($row['ban_end'] == 0),
                 'BAN_REMAINING'  => $ban_remaining,
+                'POST_ID'        => $post_id,
+                'U_POST_LINK'    => $post_url,
+                'U_USER_PROFILE' => ($row['ban_userid'] > 0) ? append_sid(generate_board_url() . '/memberlist.php', 'mode=viewprofile&u=' . (int) $row['ban_userid']) : '',
                 'U_SAVE_REASON'  => $this->helper->route('marcozp_zp_banlist_save_reason'),
                 'U_REVOKE_BAN'   => $this->helper->route('marcozp_zp_banlist_revoke_ban'),
             ]);
@@ -168,6 +192,7 @@ class main_controller
         $current = [
             'filter_type' => $filter_type,
             'filter_user' => $filter_user,
+            'filter_age'  => $filter_age,
             'sort_field'  => $sort_field,
             'sort_order'  => $sort_order,
             'start'       => 0,
@@ -192,6 +217,7 @@ class main_controller
             'ZP_BANLIST_HAS_NEXT'     => ($start + $per_page < $total),
             'FILTER_TYPE'             => $filter_type,
             'FILTER_USER'             => $filter_user,
+            'FILTER_AGE'              => $filter_age,
             'SORT_FIELD'              => $sort_field,
             'SORT_ORDER'              => $sort_order,
             'U_BANLIST'               => $this->helper->route('marcozp_zp_banlist_page'),
@@ -199,9 +225,13 @@ class main_controller
             'U_SORT_START_DESC'       => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_start', 'sort_order' => 'DESC', 'start' => 0])),
             'U_SORT_END_ASC'          => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_end',   'sort_order' => 'ASC',  'start' => 0])),
             'U_SORT_END_DESC'         => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_end',   'sort_order' => 'DESC', 'start' => 0])),
+            'U_SORT_USER_ASC'         => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_userid', 'sort_order' => 'ASC',  'start' => 0])),
+            'U_SORT_USER_DESC'        => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_userid', 'sort_order' => 'DESC', 'start' => 0])),
             'U_FILTER_ALL'            => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_type' => '', 'start' => 0])),
             'U_FILTER_TEMPORARY'      => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_type' => 'temporary', 'start' => 0])),
             'U_FILTER_PERMANENT'      => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_type' => 'permanent', 'start' => 0])),
+            'U_FILTER_AGE_5YEARS'     => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_age' => '5years', 'start' => 0])),
+            'U_FILTER_AGE_ALL'        => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_age' => 'all', 'start' => 0])),
             'U_PREV_PAGE'             => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['start' => $prev_start])),
             'U_NEXT_PAGE'             => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['start' => $next_start])),
         ]);
@@ -368,5 +398,129 @@ class main_controller
         $this->log->add('mod',   $this->user->data['user_id'], $this->user->ip, 'LOG_ZP_BANLIST_REVOKED', false, $log_params);
 
         return new \Symfony\Component\HttpFoundation\JsonResponse(['success' => true]);
+    }
+
+    public function quick_ban($user_id, $post_id)
+    {
+        // Permission check: admin with a_ban OR global mod if mod_edit enabled
+        $mod_edit_enabled = !empty($this->config['zp_banlist_mod_edit']);
+        $can_edit = ($this->auth->acl_get('a_ban'))
+            || ($mod_edit_enabled && $this->auth->acl_get('m_'));
+
+        if ($this->user->data['user_id'] == ANONYMOUS || !$can_edit)
+        {
+            return new \Symfony\Component\HttpFoundation\JsonResponse(['error' => 'NO_AUTH'], 403);
+        }
+
+        if (!$user_id || !$post_id)
+        {
+            return new \Symfony\Component\HttpFoundation\JsonResponse(['error' => 'INVALID_PARAMS'], 400);
+        }
+
+        // Fetch username for display
+        $sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $user_id;
+        $result = $this->db->sql_query($sql);
+        $username = $this->db->sql_fetchfield('username');
+        $this->db->sql_freeresult($result);
+
+        if (!$username)
+        {
+            return new \Symfony\Component\HttpFoundation\JsonResponse(['error' => 'USER_NOT_FOUND'], 404);
+        }
+
+        // POST: save ban
+        if ($this->request->is_set_post('form_submit'))
+        {
+            $ban_reason = $this->request->variable('ban_reason', '', true);
+            $ban_end_str = $this->request->variable('ban_end_datetime', '');
+            $is_permanent = $this->request->variable('is_permanent', 0);
+
+            // Convert datetime to UTC timestamp
+            $ban_end = 0;
+            if (!$is_permanent && $ban_end_str)
+            {
+                try
+                {
+                    $timezone = new \DateTimeZone($this->user->data['user_timezone'] ?: 'UTC');
+                    $ban_end_dt = new \DateTime($ban_end_str, $timezone);
+                    $ban_end_dt->setTimezone(new \DateTimeZone('UTC'));
+                    $ban_end = $ban_end_dt->getTimestamp();
+                }
+                catch (\Exception $e)
+                {
+                    $ban_end = 0;
+                }
+            }
+
+            // Insert ban
+            $ban_data = [
+                'ban_userid'    => $user_id,
+                'ban_start'    => time(),
+                'ban_end'      => $is_permanent ? 0 : $ban_end,
+                'ban_reason'   => $ban_reason,
+                'ban_give_reason' => $ban_reason,
+            ];
+
+            $sql = 'INSERT INTO ' . BANLIST_TABLE . ' ' . $this->db->sql_build_array('INSERT', $ban_data);
+            $this->db->sql_query($sql);
+
+            // Log
+            $log_params = [$username, $ban_reason];
+            $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_ZP_BANLIST_QUICK_BAN', false, $log_params);
+            $this->log->add('mod',   $this->user->data['user_id'], $this->user->ip, 'LOG_ZP_BANLIST_QUICK_BAN', false, $log_params);
+
+            // Redirect back to the same page with success parameter and ban details
+            $current_url = $this->helper->route('marcozp_zp_banlist_quick_ban', ['user_id' => $user_id, 'post_id' => $post_id]);
+            $params = ['success' => '1'];
+            if ($is_permanent) {
+                $params['permanent'] = '1';
+            } else {
+                $params['ban_end'] = $ban_end;
+            }
+            return new \Symfony\Component\HttpFoundation\RedirectResponse($current_url . '?' . http_build_query($params));
+        }
+
+        // GET: render modal
+        $default_reason = $this->language->lang('ZP_BANLIST_QUICK_BAN_DEFAULT_REASON', $post_id) . "\n";
+        $success = $this->request->variable('success', 0);
+        $is_permanent = $this->request->variable('permanent', 0);
+        $ban_end = $this->request->variable('ban_end', 0);
+
+        // Calculate remaining time for temporary bans
+        $ban_remaining_display = '';
+        if ($success && !$is_permanent && $ban_end > 0) {
+            $delta = (int) $ban_end - time();
+            if ($delta > 0) {
+                $days = (int) ($delta / 86400);
+                $hours = (int) (($delta % 86400) / 3600);
+                $minutes = (int) (($delta % 3600) / 60);
+                $ban_remaining_display = sprintf('%02d:%02d:%02d', $days, $hours, $minutes);
+            }
+        }
+
+        $ban_end_display = '';
+        if ($success) {
+            if ($is_permanent) {
+                $ban_end_display = $this->language->lang('ZP_BANLIST_PERMANENT');
+            } elseif ($ban_end > 0) {
+                $ban_end_display = $this->user->format_date((int) $ban_end);
+            }
+        }
+
+        $this->template->assign_vars([
+            'S_ZP_BANLIST_QUICK_BAN' => true,
+            'S_ZP_BANLIST_SUCCESS'   => $success,
+            'ZP_BANLIST_USERNAME'    => $username,
+            'ZP_BANLIST_USER_ID'    => $user_id,
+            'ZP_BANLIST_POST_ID'     => $post_id,
+            'ZP_BANLIST_DEFAULT_REASON' => $default_reason,
+            'U_ACTION'               => $this->helper->route('marcozp_zp_banlist_quick_ban', ['user_id' => $user_id, 'post_id' => $post_id]),
+            'U_POST_REDIRECT'        => generate_board_url(false) . '/viewtopic.php?p=' . $post_id . '#p' . $post_id,
+            'ZP_BANLIST_IS_PERMANENT' => $is_permanent,
+            'ZP_BANLIST_BAN_END'      => $ban_end_display,
+            'ZP_BANLIST_REMAINING'   => $ban_remaining_display,
+        ]);
+
+        return $this->helper->render('zp_banlist_quick_ban.html', $this->language->lang('ZP_BANLIST_QUICK_BAN_TITLE'));
     }
 }

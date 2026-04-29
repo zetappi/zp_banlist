@@ -19,7 +19,7 @@
         }
     },
     "extra": {
-        "display-name": "ZP BanList",
+        "display-name": "ZP Ban Master",
         "soft-require": {
             "phpbb/phpbb": ">=3.3.0"
         }

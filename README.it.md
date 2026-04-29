@@ -81,7 +81,8 @@ ext/marcozp/zp_banlist/
 │   └── main_module.php             # Logica pannello ACP
 ├── adm/style/
 │   ├── acp_zp_banlist.html         # Template ACP gestione
-│   └── acp_zp_banlist_diagnostics.html  # Template ACP diagnostica
+│   ├── acp_zp_banlist_diagnostics.html  # Template ACP diagnostica
+│   └── acp_zp_banlist_edit_reason.html  # Template ACP modifica motivo
 ├── config/
 │   ├── routing.yml                 # Definizione route
 │   └── services.yml                # Servizi dependency injection
@@ -103,9 +104,11 @@ ext/marcozp/zp_banlist/
 └── styles/all/
     ├── template/
     │   ├── zp_banlist_body.html    # Template pagina lista ban
+    │   ├── zp_banlist_quick_ban.html  # Template modal Quick Ban
     │   └── event/
     │       ├── overall_header_head_append.html   # Iniezione asset Flatpickr
-    │       └── overall_header_navigation_append.html  # Link menu navigazione
+    │       ├── overall_header_navigation_append.html  # Link menu navigazione
+    │       └── viewtopic_body_post_buttons_after.html  # Pulsante Quick Ban nei post
     └── theme/
         ├── zp_banlist.css          # Foglio di stile estensione
         ├── flatpickr.min.css       # Flatpickr (bundled)

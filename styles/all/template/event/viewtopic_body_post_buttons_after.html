@@ -1,0 +1,22 @@
+{% if S_ZP_BANLIST_EDIT and postrow.POSTER_ID != ANONYMOUS %}
+{% if postrow.S_ZP_USER_BANNED %}
+<span class="button button-icon-only zp-ban-button-disabled"
+   title="{{ lang('ZP_BANLIST_USER_ALREADY_BANNED') }}">
+    <i class="icon fa-lock fa-fw" aria-hidden="true"></i>
+    <span class="sr-only">{{ lang('ZP_BANLIST_USER_ALREADY_BANNED') }}</span>
+</span>
+{% elseif postrow.S_ZP_USER_NOT_BANNABLE %}
+<span class="button button-icon-only zp-ban-button-disabled"
+   title="{{ lang('ZP_BANLIST_USER_NOT_BANNABLE') }}">
+    <i class="icon fa-shield fa-fw" aria-hidden="true"></i>
+    <span class="sr-only">{{ lang('ZP_BANLIST_USER_NOT_BANNABLE') }}</span>
+</span>
+{% else %}
+<a href="app.php/zp_banlist/quick-ban/{{ postrow.POSTER_ID }}/{{ postrow.POST_ID }}"
+   class="button button-icon-only"
+   title="{{ lang('ZP_BANLIST_QUICK_BAN_TITLE') }}">
+    <i class="icon fa-ban fa-fw" aria-hidden="true"></i>
+    <span class="sr-only">{{ lang('ZP_BANLIST_QUICK_BAN_TITLE') }}</span>
+</a>
+{% endif %}
+{% endif %}

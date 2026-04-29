@@ -16,6 +16,10 @@ class main_module
     {
         global $phpbb_container;
 
+        $path_helper = $phpbb_container->get('path_helper');
+        $phpbb_root_path = defined('PHPBB_ROOT_PATH') ? PHPBB_ROOT_PATH : $path_helper->get_phpbb_root_path();
+        $phpbb_root_path = rtrim($phpbb_root_path, '/') . '/';
+
         $language = $phpbb_container->get('language');
         $language->add_lang('common',             'marcozp/zp_banlist');
         $language->add_lang('info_acp_zp_banlist', 'marcozp/zp_banlist');
@@ -47,14 +51,52 @@ class main_module
                     }
                     $config->set('zp_banlist_per_page', $per_page);
                     $config->set('zp_banlist_mod_edit', (int) $request->variable('zp_banlist_mod_edit', 0));
+                    $config->set('zp_banlist_hide_banned_avatar', (int) $request->variable('zp_banlist_hide_banned_avatar', 0));
+
+$upload_file = $request->file('zp_banlist_banned_avatar');
+                    if (!empty($upload_file['name']) && empty($upload_file['error']))
+                    {
+                        $extension = strtolower(pathinfo($upload_file['name'], PATHINFO_EXTENSION));
+                        $allowed_ext = ['gif', 'jpg', 'jpeg', 'png', 'webp'];
+
+                        if (in_array($extension, $allowed_ext))
+                        {
+                            $avatar_path = $phpbb_root_path . 'ext/marcozp/zp_banlist/styles/all/theme/image/';
+                            if (!is_dir($avatar_path))
+                            {
+                                @mkdir($avatar_path, 0755, true);
+                            }
+
+                            $filename = 'banned_avatar.' . $extension;
+                            $full_path = $avatar_path . $filename;
+                            @unlink($full_path);
+                            if (copy($upload_file['tmp_name'], $full_path) || move_uploaded_file($upload_file['tmp_name'], $full_path))
+                            {
+                                $config->set('zp_banlist_banned_avatar', $filename);
+                            }
+                            else
+                            {
+                                trigger_error('Upload failed: tmp=' . $upload_file['tmp_name'] . ' -> ' . $full_path, E_USER_WARNING);
+                            }
+                        }
+                    }
 
                     trigger_error($language->lang('ACP_ZP_BANLIST_SAVED') . adm_back_link($this->u_action));
                 }
 
+                $banned_avatar_file = $config['zp_banlist_banned_avatar'] ?? '';
+                $banned_avatar_url = '';
+                if ($banned_avatar_file)
+                {
+                    $banned_avatar_url = '../ext/marcozp/zp_banlist/styles/all/theme/image/' . $banned_avatar_file;
+                }
+
                 $template->assign_vars([
-                    'U_ACTION'             => $this->u_action,
-                    'ZP_BANLIST_PER_PAGE'  => (int) ($config['zp_banlist_per_page'] ?? 20),
-                    'ZP_BANLIST_MOD_EDIT'  => (bool) ($config['zp_banlist_mod_edit'] ?? 0),
+                    'U_ACTION'                  => $this->u_action,
+                    'ZP_BANLIST_PER_PAGE'       => (int) ($config['zp_banlist_per_page'] ?? 20),
+                    'ZP_BANLIST_MOD_EDIT'       => (bool) ($config['zp_banlist_mod_edit'] ?? 0),
+                    'ZP_BANLIST_HIDE_BANNED_AVATAR' => (bool) ($config['zp_banlist_hide_banned_avatar'] ?? 1),
+                    'ZP_BANLIST_BANNED_AVATAR_URL' => $banned_avatar_url,
                 ]);
             break;
 

@@ -3,7 +3,7 @@
 <h1>{{ lang('ACP_ZP_BANLIST_TITLE') }}</h1>
 <p>{{ lang('ACP_ZP_BANLIST_EXPLAIN') }}</p>
 
-<form method="post" action="{{ U_ACTION }}">
+<form method="post" action="{{ U_ACTION }}" enctype="multipart/form-data">
     <fieldset>
         <legend>{{ lang('ACP_ZP_BANLIST_MANAGE') }}</legend>
         <dl>
@@ -27,6 +27,31 @@
             <dd>
                 <label class="radio"><input type="radio" name="zp_banlist_mod_edit" value="1"{% if ZP_BANLIST_MOD_EDIT %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>&nbsp;
                 <label class="radio"><input type="radio" name="zp_banlist_mod_edit" value="0"{% if not ZP_BANLIST_MOD_EDIT %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+            </dd>
+        </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_ZP_BANLIST_AVATAR') }}</legend>
+        <dl>
+            <dt>
+                <span class="label">{{ lang('ACP_ZP_BANLIST_HIDE_BANNED_AVATAR') }}</span>
+                <br><span>{{ lang('ACP_ZP_BANLIST_HIDE_BANNED_AVATAR_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <label class="radio"><input type="radio" name="zp_banlist_hide_banned_avatar" value="1"{% if ZP_BANLIST_HIDE_BANNED_AVATAR %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>&nbsp;
+                <label class="radio"><input type="radio" name="zp_banlist_hide_banned_avatar" value="0"{% if not ZP_BANLIST_HIDE_BANNED_AVATAR %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <label for="zp_banlist_banned_avatar">{{ lang('ACP_ZP_BANLIST_BANNED_AVATAR') }}{{ lang('COLON') }}</label>
+                <br><span>{{ lang('ACP_ZP_BANLIST_BANNED_AVATAR_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <input type="file" id="zp_banlist_banned_avatar" name="zp_banlist_banned_avatar" accept="image/*" />
+                {% if ZP_BANLIST_BANNED_AVATAR_URL %}
+                <br><img src="{{ ZP_BANLIST_BANNED_AVATAR_URL }}" alt="" style="max-width: 100px; max-height: 100px; margin-top: 5px;" />
+                {% endif %}
             </dd>
         </dl>
     </fieldset>

@@ -1,5 +1,5 @@
 <!-- INCLUDE overall_header.html -->
-<!-- INCLUDECSS @marcozp_zp_banlist/zp_banlist.css -->
+<link href="{{ ROOT_PATH }}ext/marcozp/zp_banlist/styles/all/theme/zp_banlist.css" rel="stylesheet" type="text/css" media="screen" />
 
 <div id="zp-banlist-wrapper" class="forabg">
     <div class="inner">
@@ -30,11 +30,21 @@
                    class="zp-filter-pill{% if FILTER_TYPE == 'permanent' %} active{% endif %}">{{ lang('ZP_BANLIST_TYPE_PERMANENT') }}</a>
             </div>
 
+            <!-- Age filter -->
+            <div class="zp-filter-group">
+                <label>{{ lang('ZP_BANLIST_FILTER_AGE_LABEL') }}</label>
+                <a href="{{ U_FILTER_AGE_5YEARS }}"
+                   class="zp-filter-pill{% if FILTER_AGE == '5years' %} active{% endif %}">{{ lang('ZP_BANLIST_FILTER_AGE_5YEARS') }}</a>
+                <a href="{{ U_FILTER_AGE_ALL }}"
+                   class="zp-filter-pill{% if FILTER_AGE == 'all' %} active{% endif %}">{{ lang('ZP_BANLIST_FILTER_AGE_ALL') }}</a>
+            </div>
+
             <!-- Search -->
             <form method="get" action="{{ U_BANLIST }}" class="zp-filter-group">
                 <label>{{ lang('ZP_BANLIST_SEARCH_LABEL') }}</label>
                 <input type="text" name="filter_user" value="{{ FILTER_USER }}" class="zp-search-input" placeholder="username…" />
                 <input type="hidden" name="filter_type" value="{{ FILTER_TYPE }}" />
+                <input type="hidden" name="filter_age" value="{{ FILTER_AGE }}" />
                 <input type="hidden" name="sort_field"  value="{{ SORT_FIELD }}" />
                 <input type="hidden" name="sort_order"  value="{{ SORT_ORDER }}" />
                 <button type="submit" class="zp-search-btn">{{ lang('ZP_BANLIST_SEARCH_BTN') }}</button>
@@ -46,7 +56,17 @@
         <table class="zp-banlist-table">
             <thead>
                 <tr>
-                    <th style="width:22%">{{ lang('ZP_BANLIST_COL_USER') }}</th>
+                    <th style="width:22%">
+                        {{ lang('ZP_BANLIST_COL_USER') }}
+                        <span class="zp-sort-arrows">
+                            <a href="{{ U_SORT_USER_ASC }}"
+                               class="zp-sort-btn{% if SORT_FIELD == 'ban_userid' and SORT_ORDER == 'ASC' %} active{% endif %}"
+                               title="{{ lang('ZP_BANLIST_SORT_ASC') }}"><i class="icon fa-caret-up fa-fw" aria-hidden="true"></i></a>
+                            <a href="{{ U_SORT_USER_DESC }}"
+                               class="zp-sort-btn{% if SORT_FIELD == 'ban_userid' and SORT_ORDER == 'DESC' %} active{% endif %}"
+                               title="{{ lang('ZP_BANLIST_SORT_DESC') }}"><i class="icon fa-caret-down fa-fw" aria-hidden="true"></i></a>
+                        </span>
+                    </th>
                     <th style="width:18%">
                         {{ lang('ZP_BANLIST_COL_START') }}
                         <span class="zp-sort-arrows">
@@ -71,6 +91,7 @@
                     </th>
                     <th style="width:12%">{{ lang('ZP_BANLIST_COL_TYPE') }}</th>
                     <th>{{ lang('ZP_BANLIST_COL_REASON') }}</th>
+                    <th style="width:8%">{{ lang('ZP_BANLIST_COL_POST') }}</th>
                     {% if S_ZP_BANLIST_EDIT %}<th style="width:5%"></th>{% endif %}
                 </tr>
             </thead>
@@ -84,10 +105,18 @@
                 {% for ban in loops.banlist %}
                 <tr class="zp-ban-row {% if loop.index is odd %}zp-row-odd{% else %}zp-row-even{% endif %}">
                     <td data-label="{{ lang('ZP_BANLIST_COL_USER') }}">
-                        {% if ban.USER_COLOUR %}
-                            <strong style="color:#{{ ban.USER_COLOUR }};">{{ ban.USERNAME }}</strong>
+                        {% if ban.U_USER_PROFILE %}
+                            {% if ban.USER_COLOUR %}
+                                <strong><a href="{{ ban.U_USER_PROFILE }}" style="color:#{{ ban.USER_COLOUR }}; text-decoration:none;">{{ ban.USERNAME }}</a></strong>
+                            {% else %}
+                                <strong><a href="{{ ban.U_USER_PROFILE }}" style="color:inherit; text-decoration:none;">{{ ban.USERNAME }}</a></strong>
+                            {% endif %}
                         {% else %}
-                            <strong>{{ ban.USERNAME }}</strong>
+                            {% if ban.USER_COLOUR %}
+                                <strong style="color:#{{ ban.USER_COLOUR }};">{{ ban.USERNAME }}</strong>
+                            {% else %}
+                                <strong>{{ ban.USERNAME }}</strong>
+                            {% endif %}
                         {% endif %}
                     </td>
                     <td data-label="{{ lang('ZP_BANLIST_COL_START') }}">{{ ban.BAN_START }}</td>
@@ -105,6 +134,17 @@
                     </td>
                     <td data-label="{{ lang('ZP_BANLIST_COL_REASON') }}" class="zp-reason-cell" id="reason-cell-{{ ban.BAN_ID }}">
                         <span class="zp-reason-text">{% if ban.BAN_GIVE_REASON %}{{ ban.BAN_GIVE_REASON }}{% elseif ban.BAN_REASON %}{{ ban.BAN_REASON }}{% endif %}</span>
+                    </td>
+                    <td data-label="{{ lang('ZP_BANLIST_COL_POST') }}">
+                        {% if ban.POST_ID %}
+                        <a href="{{ ban.U_POST_LINK }}" title="{{ lang('ZP_BANLIST_VIEW_POST_TITLE') }}" target="_blank">
+                            <i class="icon fa-external-link fa-fw" aria-hidden="true"></i>
+                        </a>
+                        {% else %}
+                        <span title="{{ lang('ZP_BANLIST_MOD_DECISION_TITLE') }}">
+                            <i class="icon fa-gavel fa-fw" aria-hidden="true"></i>
+                        </span>
+                        {% endif %}
                     </td>
                     {% if S_ZP_BANLIST_EDIT %}
                     <td class="zp-action-cell" data-label="">
@@ -149,7 +189,7 @@
                                 <button class="zp-cancel-btn" data-ban-id="{{ ban.BAN_ID }}">
                                     <i class="icon fa-times fa-fw" aria-hidden="true"></i> {{ lang('ZP_BANLIST_CANCEL_BTN') }}
                                 </button>
-                                <button class="zp-revoke-btn" data-ban-id="{{ ban.BAN_ID }}" data-revoke-url="{{ ban.U_REVOKE_BAN }}" data-username="{{ ban.USERNAME }}" data-confirm="{{ lang('ZP_BANLIST_REVOKE_CONFIRM') }}">
+                                <button class="zp-revoke-btn" data-ban-id="{{ ban.BAN_ID }}" data-revoke-url="{{ ban.U_REVOKE_BAN }}" data-username="{{ ban.USERNAME }}" data-ban-end="{{ ban.BAN_END }}" data-confirm="{{ lang('ZP_BANLIST_REVOKE_CONFIRM') }}">
                                     <i class="icon fa-ban fa-fw" aria-hidden="true"></i> {{ lang('ZP_BANLIST_REVOKE_BTN') }}
                                 </button>
                                 <span class="zp-edit-msg" id="edit-msg-{{ ban.BAN_ID }}"></span>
@@ -243,35 +283,59 @@
         }
         var revoke = e.target.closest('.zp-revoke-btn');
         if (revoke) {
-            var banId    = revoke.dataset.banId;
-            var url      = revoke.dataset.revokeUrl;
-            var username = revoke.dataset.username;
-            var msg      = document.getElementById('edit-msg-' + banId);
-            if (!confirm(username + ': ' + revoke.dataset.confirm)) { return; }
-            revoke.disabled = true;
-            msg.textContent = '…';
-            msg.className = 'zp-edit-msg';
-            var fd = new FormData();
-            fd.append('ban_id', banId);
-            fetch(url, { method: 'POST', body: fd, credentials: 'same-origin' })
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    if (data.success) {
-                        var banRow  = document.getElementById('edit-row-' + banId);
-                        var mainRow = banRow ? banRow.previousElementSibling : null;
-                        if (banRow)  banRow.remove();
-                        if (mainRow) mainRow.remove();
-                    } else {
-                        msg.textContent = data.error || 'Error';
+            e.preventDefault();
+            var banId     = revoke.dataset.banId;
+            var url       = revoke.dataset.revokeUrl;
+            var username  = revoke.dataset.username;
+            var banEnd    = revoke.dataset.banEnd;
+            var revokeMsg = revoke.dataset.confirm;
+            var modal     = document.getElementById('zp-revoke-modal');
+            var usernameEl = document.getElementById('zp-revoke-username');
+            var banEndEl   = document.getElementById('zp-revoke-ban-end');
+            var confirmBtn = document.getElementById('zp-revoke-confirm');
+            var cancelBtn = document.getElementById('zp-revoke-cancel');
+            var msg       = document.getElementById('edit-msg-' + banId);
+
+            var revokeAction = function() {
+                revoke.disabled = true;
+                msg.textContent = '…';
+                msg.className = 'zp-edit-msg';
+                var fd = new FormData();
+                fd.append('ban_id', banId);
+                fetch(url, { method: 'POST', body: fd, credentials: 'same-origin' })
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data.success) {
+                            var banRow  = document.getElementById('edit-row-' + banId);
+                            var mainRow = banRow ? banRow.previousElementSibling : null;
+                            if (banRow)  banRow.remove();
+                            if (mainRow) mainRow.remove();
+                        } else {
+                            msg.textContent = data.error || 'Error';
+                            msg.className = 'zp-edit-msg zp-edit-msg-error';
+                            revoke.disabled = false;
+                        }
+                    })
+                    .catch(function() {
+                        msg.textContent = 'Network error';
                         msg.className = 'zp-edit-msg zp-edit-msg-error';
                         revoke.disabled = false;
-                    }
-                })
-                .catch(function() {
-                    msg.textContent = 'Network error';
-                    msg.className = 'zp-edit-msg zp-edit-msg-error';
-                    revoke.disabled = false;
-                });
+                    });
+            };
+
+            usernameEl.textContent = username;
+            banEndEl.textContent = banEnd;
+            modal.style.display = 'flex';
+
+            confirmBtn.onclick = function() {
+                modal.style.display = 'none';
+                revokeAction();
+            };
+
+            cancelBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+
             return;
         }
         var save = e.target.closest('.zp-save-btn');
@@ -388,5 +452,25 @@
 })();
 </script>
 {% endif %}
+
+<!-- ── Revoke Confirm Modal ─────────────────────────────────── -->
+<div id="zp-revoke-modal" class="zp-confirm-modal">
+    <div class="zp-confirm-content">
+        <div class="zp-confirm-header">{{ lang('ZP_BANLIST_REVOKE_TITLE') }}</div>
+        <div class="zp-confirm-body">
+            <div style="text-align: center; margin: 20px 0;">
+                <span id="zp-revoke-username" class="zp-confirm-username"></span>
+            </div>
+            <div style="text-align: center; margin: 15px 0;">
+                <span id="zp-revoke-ban-end" class="zp-confirm-duration-badge"></span>
+            </div>
+            <div class="zp-confirm-question">{{ lang('ZP_BANLIST_REVOKE_QUESTION') }}</div>
+        </div>
+        <div class="zp-confirm-buttons">
+            <button id="zp-revoke-confirm" class="zp-confirm-ok">{{ lang('ZP_BANLIST_REVOKE_CONFIRM') }}</button>
+            <button id="zp-revoke-cancel" class="zp-confirm-cancel">{{ lang('ZP_BANLIST_REVOKE_CANCEL') }}</button>
+        </div>
+    </div>
+</div>
 
 <!-- INCLUDE overall_footer.html -->
