@@ -21,7 +21,9 @@ $lang = array_merge($lang, [
     'ZP_BANLIST_COL_TYPE'    => 'Type',
     'ZP_BANLIST_COL_REASON'  => 'Reason',
     'ZP_BANLIST_COL_POST'    => 'Post',
+    'ZP_BANLIST_COL_LAST_POST' => 'Last post',
     'ZP_BANLIST_VIEW_POST_TITLE'=> 'View post',
+    'ZP_BANLIST_VIEW_LAST_POST_TITLE'=> 'View last post',
     'ZP_BANLIST_MOD_DECISION_TITLE'=> 'Moderator decision',
     'ZP_BANLIST_COL_END'     => 'Expires',
 
@@ -94,4 +96,7 @@ $lang = array_merge($lang, [
     'ACP_ZP_BANLIST_HIDE_BANNED_AVATAR_EXPLAIN' => 'If enabled, the avatar of banned users will be hidden.',
     'ACP_ZP_BANLIST_BANNED_AVATAR' => 'Replacement avatar image',
     'ACP_ZP_BANLIST_BANNED_AVATAR_EXPLAIN' => 'Upload an image to replace the avatar of banned users.',
+    'ZP_BANLIST_POST_HIDDEN_NOTICE' => 'The content of this post is hidden. Visible only to moderators.',
+    'ZP_BANLIST_POST_VISIBLE_TO_MODS' => 'Banned user. Text visible only to moderators.',
+    'ZP_BANLIST_QUOTE_REMOVED' => 'Quote removed: banned user.',
 ]);

@@ -22,7 +22,9 @@ $lang = array_merge($lang, [
     'ZP_BANLIST_COL_TYPE'    => 'Tipo',
     'ZP_BANLIST_COL_REASON'  => 'Motivazione',
     'ZP_BANLIST_COL_POST'    => 'Post',
+    'ZP_BANLIST_COL_LAST_POST' => 'Ultimo post',
     'ZP_BANLIST_VIEW_POST_TITLE'=> 'Vedi post',
+    'ZP_BANLIST_VIEW_LAST_POST_TITLE'=> 'Vedi ultimo post',
     'ZP_BANLIST_MOD_DECISION_TITLE'=> 'Decisione moderazione',
 
     'ZP_BANLIST_TYPE_ALL'       => 'Tutti',
@@ -94,4 +96,7 @@ $lang = array_merge($lang, [
     'ACP_ZP_BANLIST_HIDE_BANNED_AVATAR_EXPLAIN' => 'Se attivo, l\'avatar degli utenti bannati viene nascosto.',
     'ACP_ZP_BANLIST_BANNED_AVATAR' => 'Immagine avatar sostitutiva',
     'ACP_ZP_BANLIST_BANNED_AVATAR_EXPLAIN' => 'Carica un\'immagine per sostituire l\'avatar degli utenti bannati.',
+    'ZP_BANLIST_POST_HIDDEN_NOTICE' => 'Il contenuto di questo post è nascosto. Visibile solo alla moderazione.',
+    'ZP_BANLIST_POST_VISIBLE_TO_MODS' => 'Utente bannato. Testo visibile solo alla moderazione.',
+    'ZP_BANLIST_QUOTE_REMOVED' => 'Citazione rimossa: utente bannato.',
 ]);

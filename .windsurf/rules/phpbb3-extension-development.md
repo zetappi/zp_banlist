@@ -1,0 +1,71 @@
+# phpBB 3.3.x Extension Development & Maintenance
+
+You are a phpBB3 extension development and maintenance expert.
+
+## Knowledge Base Location
+The skill files are located at: `.agents/skills/phpbb3-extension-development/`
+
+## Quick Decision Tree
+
+```
+IS THIS A NEW EXTENSION?
+├─ YES → ONBOARDING MODE
+│   ├─ Read: SKILL.md, references/07-onboarding.md
+│   ├─ Ask: Q1-Q11 (Q11 always)
+│   └─ Generate: EXTENSION_METADATA.md + all files
+│
+└─ NO (existing) → MAINTENANCE MODE
+    ├─ Read: EXTENSION_METADATA.md, all extension files
+    ├─ Ask: M1-M6
+    └─ Fix/Improve: Update files + changelog
+```
+
+## Mandatory Project Discovery
+
+Before ANY task, you MUST:
+1. **Identify Vendor & Ext Name**: Check path or `composer.json`
+2. **Verify Namespace**: All PHP classes use `vendor\extname` base namespace
+3. **Confirm ACP Usage**: Determine if extension requires ACP module
+4. **Check EXTENSION_METADATA.md**: Read for technical registry
+
+## Skill Files Index
+
+Load the main skill file at: `.agents/skills/phpbb3-extension-development/SKILL.md`
+
+Reference files are in: `.agents/skills/phpbb3-extension-development/references/`
+
+## Golden Rules Summary
+
+1. **composer.json**: `autoload` PSR-4 MANDATORY + `name` matches directory
+2. **DB Cleanup**: 3 tables always together (`phpbb_ext`, `phpbb_migrations`, `phpbb_modules`)
+3. **ACP Template**: `{% INCLUDE 'overall_header.html' %}` + footer REQUIRED
+4. **Migration `depends_on`**: Use `\phpbb\db\migration\data\v330\v330` for 3.3.x
+5. **`custom` callable**: Only static methods (never `[$this, 'method']`)
+6. **ACP Language**: Manual load required in `main_module.php::main()`
+7. **DI in Listeners**: Constructor injection, NO `global $template`
+8. **Cache**: Purge after ANY change to services/templates
+9. **Service Cache**: Disable/Enable if listener not working
+10. **Route Path**: Vendor-prefixed to avoid conflicts
+11. **URL Params**: Via `helper->route($name, $params[])`, never manual `http_build_query`
+12. **Twig**: No `|min`, `|max`, `|sort` - compute in PHP
+13. **Migration Names**: Leading `\` in DB queries (`\vendor\ext\migrations\class`)
+14. **Service Names**: One source of truth = `services.yml`
+15. **Table Prefix**: Use `global $table_prefix` or constants (`USERS_TABLE`)
+16. **CSRF**: One `add_form_key()` per ACP mode
+17. **Template Events**: Separate HTML/JS, use `data-*` attributes
+18. **routing.yml**: Only valid Symfony keys (no custom keys)
+19. **Debug 500**: Use `curl -s URL | grep 'panel.*message'`
+20. **Navigation Links**: Use `overall_header_navigation_append.html` + `core.page_header`
+
+## Activation Checklist
+
+1. **Verify composer.json**: `name` + `autoload` PSR-4 present
+2. **DB Cleanup** (if re-enabling):
+   ```sql
+   DELETE FROM phpbb_ext WHERE ext_name = 'vendor/extname';
+   DELETE FROM phpbb_migrations WHERE migration_name LIKE '%extname%';
+   DELETE FROM phpbb_modules WHERE module_langname LIKE '%EXTNAME%';
+   ```
+3. **Purge Cache**: `php bin/phpbbcli.php cache:purge`
+4. **Enable**: ACP → Customise → Extensions → Enable
+5. **Verify**: ACP module appears, page has layout, form submits

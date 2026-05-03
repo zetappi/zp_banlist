@@ -52,8 +52,25 @@ class main_module
                     $config->set('zp_banlist_per_page', $per_page);
                     $config->set('zp_banlist_mod_edit', (int) $request->variable('zp_banlist_mod_edit', 0));
                     $config->set('zp_banlist_hide_banned_avatar', (int) $request->variable('zp_banlist_hide_banned_avatar', 0));
+                    $config->set('zp_banlist_hide_banned_post', (int) $request->variable('zp_banlist_hide_banned_post', 0));
+                    $config->set('zp_banlist_hide_banned_signature', (int) $request->variable('zp_banlist_hide_banned_signature', 0));
 
-$upload_file = $request->file('zp_banlist_banned_avatar');
+                    // Handle avatar selection from existing images
+                    $selected_avatar = $request->variable('zp_banlist_avatar_select', '', true);
+                    if ($selected_avatar !== '')
+                    {
+                        $avatar_path = $phpbb_root_path . 'ext/marcozp/zp_banlist/styles/all/theme/image/';
+                        $allowed_ext = ['gif', 'jpg', 'jpeg', 'png', 'webp'];
+                        $extension = strtolower(pathinfo($selected_avatar, PATHINFO_EXTENSION));
+                        
+                        if (in_array($extension, $allowed_ext) && file_exists($avatar_path . $selected_avatar))
+                        {
+                            $config->set('zp_banlist_banned_avatar', $selected_avatar);
+                        }
+                    }
+
+                    // Handle new file upload
+                    $upload_file = $request->file('zp_banlist_banned_avatar');
                     if (!empty($upload_file['name']) && empty($upload_file['error']))
                     {
                         $extension = strtolower(pathinfo($upload_file['name'], PATHINFO_EXTENSION));
@@ -61,23 +78,88 @@ $upload_file = $request->file('zp_banlist_banned_avatar');
 
                         if (in_array($extension, $allowed_ext))
                         {
-                            $avatar_path = $phpbb_root_path . 'ext/marcozp/zp_banlist/styles/all/theme/image/';
-                            if (!is_dir($avatar_path))
+                            // Verify file is actually an image by checking MIME type and content
+                            $finfo = @finfo_open(FILEINFO_MIME_TYPE);
+                            if ($finfo)
                             {
-                                @mkdir($avatar_path, 0755, true);
-                            }
+                                $mime_type = @finfo_file($finfo, $upload_file['tmp_name']);
+                                @finfo_close($finfo);
 
-                            $filename = 'banned_avatar.' . $extension;
-                            $full_path = $avatar_path . $filename;
-                            @unlink($full_path);
-                            if (copy($upload_file['tmp_name'], $full_path) || move_uploaded_file($upload_file['tmp_name'], $full_path))
-                            {
-                                $config->set('zp_banlist_banned_avatar', $filename);
+                                $allowed_mime_types = [
+                                    'gif' => 'image/gif',
+                                    'jpg' => 'image/jpeg',
+                                    'jpeg' => 'image/jpeg',
+                                    'png' => 'image/png',
+                                    'webp' => 'image/webp',
+                                ];
+
+                                if (!in_array($mime_type, $allowed_mime_types))
+                                {
+                                    trigger_error($language->lang('ACP_ZP_BANLIST_UPLOAD_INVALID_TYPE'), E_USER_WARNING);
+                                }
+                                else
+                                {
+                                    // Additional check using getimagesize to verify it's a valid image
+                                    $image_info = @getimagesize($upload_file['tmp_name']);
+                                    if ($image_info === false)
+                                    {
+                                        trigger_error($language->lang('ACP_ZP_BANLIST_UPLOAD_INVALID_IMAGE'), E_USER_WARNING);
+                                    }
+                                    else
+                                    {
+                                        $avatar_path = $phpbb_root_path . 'ext/marcozp/zp_banlist/styles/all/theme/image/';
+                                        if (!is_dir($avatar_path))
+                                        {
+                                            @mkdir($avatar_path, 0755, true);
+                                        }
+
+                                        $filename = 'banned_avatar.' . $extension;
+                                        $full_path = $avatar_path . $filename;
+                                        @unlink($full_path);
+                                        if (copy($upload_file['tmp_name'], $full_path) || move_uploaded_file($upload_file['tmp_name'], $full_path))
+                                        {
+                                            $config->set('zp_banlist_banned_avatar', $filename);
+                                        }
+                                        else
+                                        {
+                                            trigger_error('Upload failed: tmp=' . $upload_file['tmp_name'] . ' -> ' . $full_path, E_USER_WARNING);
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                trigger_error('Upload failed: tmp=' . $upload_file['tmp_name'] . ' -> ' . $full_path, E_USER_WARNING);
+                                // Fallback if finfo is not available
+                                $image_info = @getimagesize($upload_file['tmp_name']);
+                                if ($image_info === false)
+                                {
+                                    trigger_error($language->lang('ACP_ZP_BANLIST_UPLOAD_INVALID_IMAGE'), E_USER_WARNING);
+                                }
+                                else
+                                {
+                                    $avatar_path = $phpbb_root_path . 'ext/marcozp/zp_banlist/styles/all/theme/image/';
+                                    if (!is_dir($avatar_path))
+                                    {
+                                        @mkdir($avatar_path, 0755, true);
+                                    }
+
+                                    $filename = 'banned_avatar.' . $extension;
+                                    $full_path = $avatar_path . $filename;
+                                    @unlink($full_path);
+                                    if (copy($upload_file['tmp_name'], $full_path) || move_uploaded_file($upload_file['tmp_name'], $full_path))
+                                    {
+                                        $config->set('zp_banlist_banned_avatar', $filename);
+                                    }
+                                    else
+                                    {
+                                        trigger_error('Upload failed: tmp=' . $upload_file['tmp_name'] . ' -> ' . $full_path, E_USER_WARNING);
+                                    }
+                                }
                             }
+                        }
+                        else
+                        {
+                            trigger_error($language->lang('ACP_ZP_BANLIST_UPLOAD_INVALID_EXTENSION'), E_USER_WARNING);
                         }
                     }
 
@@ -91,12 +173,45 @@ $upload_file = $request->file('zp_banlist_banned_avatar');
                     $banned_avatar_url = '../ext/marcozp/zp_banlist/styles/all/theme/image/' . $banned_avatar_file;
                 }
 
+                // Get list of existing images in the directory
+                $avatar_path = $phpbb_root_path . 'ext/marcozp/zp_banlist/styles/all/theme/image/';
+                $existing_images = [];
+                $allowed_ext = ['gif', 'jpg', 'jpeg', 'png', 'webp'];
+                if (is_dir($avatar_path))
+                {
+                    $files = scandir($avatar_path);
+                    foreach ($files as $file)
+                    {
+                        if ($file !== '.' && $file !== '..')
+                        {
+                            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                            if (in_array($ext, $allowed_ext))
+                            {
+                                $existing_images[] = $file;
+                            }
+                        }
+                    }
+                }
+                sort($existing_images);
+
+                foreach ($existing_images as $image)
+                {
+                    $template->assign_block_vars('avatar_images', [
+                        'FILENAME' => $image,
+                        'URL' => '../ext/marcozp/zp_banlist/styles/all/theme/image/' . $image,
+                        'SELECTED' => ($image === $banned_avatar_file),
+                    ]);
+                }
+
                 $template->assign_vars([
                     'U_ACTION'                  => $this->u_action,
                     'ZP_BANLIST_PER_PAGE'       => (int) ($config['zp_banlist_per_page'] ?? 20),
                     'ZP_BANLIST_MOD_EDIT'       => (bool) ($config['zp_banlist_mod_edit'] ?? 0),
                     'ZP_BANLIST_HIDE_BANNED_AVATAR' => (bool) ($config['zp_banlist_hide_banned_avatar'] ?? 1),
+                    'ZP_BANLIST_HIDE_BANNED_POST' => (bool) ($config['zp_banlist_hide_banned_post'] ?? 0),
+                    'ZP_BANLIST_HIDE_BANNED_SIGNATURE' => (bool) ($config['zp_banlist_hide_banned_signature'] ?? 0),
                     'ZP_BANLIST_BANNED_AVATAR_URL' => $banned_avatar_url,
+                    'S_HAS_AVATAR_IMAGES' => count($existing_images) > 0,
                 ]);
             break;
 

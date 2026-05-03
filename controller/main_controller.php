@@ -67,7 +67,7 @@ class main_controller
         $sort_order    = $this->request->variable('sort_order', 'DESC');
 
         // Validate sort params
-        $allowed_fields = ['ban_start', 'ban_end', 'ban_userid'];
+        $allowed_fields = ['ban_start', 'ban_end', 'ban_userid', 'last_post'];
         if (!in_array($sort_field, $allowed_fields, true))
         {
             $sort_field = 'ban_start';
@@ -110,13 +110,22 @@ class main_controller
         $this->db->sql_freeresult($result);
 
         // Fetch rows
+        $sort_clause = '';
+        if ($sort_field === 'last_post') {
+            $sort_clause = 'ORDER BY last_post_time ' . $sort_order;
+        } else {
+            $sort_clause = 'ORDER BY b.' . $sort_field . ' ' . $sort_order;
+        }
+
         $sql = 'SELECT b.ban_id, b.ban_userid, b.ban_ip, b.ban_email,
                        b.ban_start, b.ban_end, b.ban_reason, b.ban_give_reason,
-                       u.username, u.user_colour
+                       u.username, u.user_colour,
+                       (SELECT MAX(p.post_time) FROM ' . POSTS_TABLE . ' p WHERE p.poster_id = b.ban_userid) AS last_post_time,
+                       (SELECT p.post_id FROM ' . POSTS_TABLE . ' p WHERE p.poster_id = b.ban_userid ORDER BY p.post_time DESC LIMIT 1) AS last_post_id
             FROM ' . BANLIST_TABLE . ' b
             LEFT JOIN ' . USERS_TABLE . ' u ON (b.ban_userid = u.user_id)
             ' . $where_sql . '
-            ORDER BY b.' . $sort_field . ' ' . $sort_order;
+            ' . $sort_clause;
 
         $result = $this->db->sql_query_limit($sql, $per_page, $start);
 
@@ -140,6 +149,16 @@ class main_controller
                 if ($post_id) {
                     $post_url = generate_board_url(false) . '/viewtopic.php?p=' . $post_id . '#p' . $post_id;
                 }
+            }
+
+            // Get last post information
+            $last_post_time = $row['last_post_time'] ?? 0;
+            $last_post_id = $row['last_post_id'] ?? 0;
+            $last_post_url = '';
+            $last_post_display = '';
+            if ($last_post_id > 0) {
+                $last_post_url = generate_board_url(false) . '/viewtopic.php?p=' . $last_post_id . '#p' . $last_post_id;
+                $last_post_display = $this->user->format_date($last_post_time);
             }
 
             // Calculate remaining time for temporary bans
@@ -184,6 +203,8 @@ class main_controller
                 'U_USER_PROFILE' => ($row['ban_userid'] > 0) ? append_sid(generate_board_url() . '/memberlist.php', 'mode=viewprofile&u=' . (int) $row['ban_userid']) : '',
                 'U_SAVE_REASON'  => $this->helper->route('marcozp_zp_banlist_save_reason'),
                 'U_REVOKE_BAN'   => $this->helper->route('marcozp_zp_banlist_revoke_ban'),
+                'LAST_POST_DISPLAY' => $last_post_display,
+                'U_LAST_POST_LINK' => $last_post_url,
             ]);
         }
         $this->db->sql_freeresult($result);
@@ -227,6 +248,8 @@ class main_controller
             'U_SORT_END_DESC'         => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_end',   'sort_order' => 'DESC', 'start' => 0])),
             'U_SORT_USER_ASC'         => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_userid', 'sort_order' => 'ASC',  'start' => 0])),
             'U_SORT_USER_DESC'        => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'ban_userid', 'sort_order' => 'DESC', 'start' => 0])),
+            'U_SORT_LAST_POST_ASC'    => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'last_post', 'sort_order' => 'ASC',  'start' => 0])),
+            'U_SORT_LAST_POST_DESC'   => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['sort_field' => 'last_post', 'sort_order' => 'DESC', 'start' => 0])),
             'U_FILTER_ALL'            => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_type' => '', 'start' => 0])),
             'U_FILTER_TEMPORARY'      => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_type' => 'temporary', 'start' => 0])),
             'U_FILTER_PERMANENT'      => $this->helper->route('marcozp_zp_banlist_page', array_merge($current, ['filter_type' => 'permanent', 'start' => 0])),

@@ -44,14 +44,44 @@
         </dl>
         <dl>
             <dt>
+                <span class="label">{{ lang('ACP_ZP_BANLIST_HIDE_BANNED_POST') }}</span>
+                <br><span>{{ lang('ACP_ZP_BANLIST_HIDE_BANNED_POST_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <label class="radio"><input type="radio" name="zp_banlist_hide_banned_post" value="1"{% if ZP_BANLIST_HIDE_BANNED_POST %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>&nbsp;
+                <label class="radio"><input type="radio" name="zp_banlist_hide_banned_post" value="0"{% if not ZP_BANLIST_HIDE_BANNED_POST %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <span class="label">{{ lang('ACP_ZP_BANLIST_HIDE_BANNED_SIGNATURE') }}</span>
+                <br><span>{{ lang('ACP_ZP_BANLIST_HIDE_BANNED_SIGNATURE_EXPLAIN') }}</span>
+            </dt>
+            <dd>
+                <label class="radio"><input type="radio" name="zp_banlist_hide_banned_signature" value="1"{% if ZP_BANLIST_HIDE_BANNED_SIGNATURE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>&nbsp;
+                <label class="radio"><input type="radio" name="zp_banlist_hide_banned_signature" value="0"{% if not ZP_BANLIST_HIDE_BANNED_SIGNATURE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
                 <label for="zp_banlist_banned_avatar">{{ lang('ACP_ZP_BANLIST_BANNED_AVATAR') }}{{ lang('COLON') }}</label>
                 <br><span>{{ lang('ACP_ZP_BANLIST_BANNED_AVATAR_EXPLAIN') }}</span>
             </dt>
             <dd>
+                <label for="zp_banlist_avatar_select">{{ lang('ACP_ZP_BANLIST_SELECT_EXISTING') }}{{ lang('COLON') }}</label>
+                <select id="zp_banlist_avatar_select" name="zp_banlist_avatar_select" style="max-width: 300px;">
+                    <option value="">{{ lang('ACP_ZP_BANLIST_NO_SELECTION') }}</option>
+                    <!-- BEGIN avatar_images -->
+                    <option value="{avatar_images.FILENAME}"<!-- IF avatar_images.SELECTED --> selected="selected"<!-- ENDIF -->>{avatar_images.FILENAME}</option>
+                    <!-- END avatar_images -->
+                </select>
+                <!-- IF S_HAS_AVATAR_IMAGES -->
+                <br><span>{{ lang('ACP_ZP_BANLIST_OR_UPLOAD') }}</span>
+                <!-- ENDIF -->
                 <input type="file" id="zp_banlist_banned_avatar" name="zp_banlist_banned_avatar" accept="image/*" />
-                {% if ZP_BANLIST_BANNED_AVATAR_URL %}
-                <br><img src="{{ ZP_BANLIST_BANNED_AVATAR_URL }}" alt="" style="max-width: 100px; max-height: 100px; margin-top: 5px;" />
-                {% endif %}
+                <!-- IF ZP_BANLIST_BANNED_AVATAR_URL -->
+                <br><img src="{ZP_BANLIST_BANNED_AVATAR_URL}" alt="" style="max-width: 100px; max-height: 100px; margin-top: 5px;" />
+                <!-- ENDIF -->
             </dd>
         </dl>
     </fieldset>

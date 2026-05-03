@@ -48,6 +48,19 @@ $lang = array_merge($lang, [
     'ACP_ZP_BANLIST_MOD_EDIT'            => 'Allow global moderators',
     'ACP_ZP_BANLIST_MOD_EDIT_EXPLAIN'    => 'If enabled, global moderators can edit the ban message and expiry directly from the ban list.',
 
+    'ACP_ZP_BANLIST_HIDE_BANNED_POST'        => 'Hide banned user posts',
+    'ACP_ZP_BANLIST_HIDE_BANNED_POST_EXPLAIN' => 'If enabled, the text of posts by banned users will be hidden from regular users and visible only to administrators and moderators.',
+
+    'ACP_ZP_BANLIST_HIDE_BANNED_SIGNATURE'        => 'Hide banned user signatures',
+    'ACP_ZP_BANLIST_HIDE_BANNED_SIGNATURE_EXPLAIN' => 'If enabled, the signature of banned users will be hidden from all users.',
+
+    'ACP_ZP_BANLIST_SELECT_EXISTING'     => 'Select existing image',
+    'ACP_ZP_BANLIST_NO_SELECTION'       => '-- No selection --',
+    'ACP_ZP_BANLIST_OR_UPLOAD'           => 'or upload a new image:',
+    'ACP_ZP_BANLIST_UPLOAD_INVALID_TYPE' => 'The uploaded file is not a valid image.',
+    'ACP_ZP_BANLIST_UPLOAD_INVALID_IMAGE' => 'The uploaded file is not a valid image.',
+    'ACP_ZP_BANLIST_UPLOAD_INVALID_EXTENSION' => 'File extension not allowed.',
+
     'LOG_ZP_BANLIST_REASON_EDITED'          => '<strong>Ban message edited</strong> for user %1$s — message: %2$s',
     'LOG_ZP_BANLIST_REASON_AND_END_EDITED'  => '<strong>Ban message and expiry edited</strong> for user %1$s — message: %2$s — expiry: %3$s &rarr; %4$s',
     'LOG_ZP_BANLIST_REVOKED'                => '<strong>Ban revoked</strong> for user %1$s',

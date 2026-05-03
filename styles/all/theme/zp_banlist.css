@@ -945,3 +945,32 @@ dd.profile-posts .zp-ban-badge,
     font-weight: bold;
     font-size: 1.3em;
 }
+
+/* ── Banned Post Notices ───────────────────────────────────── */
+.zp-banned-post-notice {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.zp-banned-post-notice.zp-notice-mod {
+    background-color: #d1ecf1;
+    border: 1px solid #17a2b8;
+    color: #0c5460;
+}
+
+.zp-banned-post-notice.zp-notice-hidden {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+}
+
+.zp-banned-quote-removed {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 4px;
+    color: #856404;
+    font-style: italic;
+}

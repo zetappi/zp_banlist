@@ -92,13 +92,24 @@
                     <th style="width:12%">{{ lang('ZP_BANLIST_COL_TYPE') }}</th>
                     <th>{{ lang('ZP_BANLIST_COL_REASON') }}</th>
                     <th style="width:8%">{{ lang('ZP_BANLIST_COL_POST') }}</th>
+                    <th style="width:18%">
+                        {{ lang('ZP_BANLIST_COL_LAST_POST') }}
+                        <span class="zp-sort-arrows">
+                            <a href="{{ U_SORT_LAST_POST_ASC }}"
+                               class="zp-sort-btn{% if SORT_FIELD == 'last_post' and SORT_ORDER == 'ASC' %} active{% endif %}"
+                               title="{{ lang('ZP_BANLIST_SORT_ASC') }}"><i class="icon fa-caret-up fa-fw" aria-hidden="true"></i></a>
+                            <a href="{{ U_SORT_LAST_POST_DESC }}"
+                               class="zp-sort-btn{% if SORT_FIELD == 'last_post' and SORT_ORDER == 'DESC' %} active{% endif %}"
+                               title="{{ lang('ZP_BANLIST_SORT_DESC') }}"><i class="icon fa-caret-down fa-fw" aria-hidden="true"></i></a>
+                        </span>
+                    </th>
                     {% if S_ZP_BANLIST_EDIT %}<th style="width:5%"></th>{% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% if not loops.banlist %}
                 <tr class="zp-no-results">
-                    <td colspan="5">{{ lang('ZP_BANLIST_NO_RESULTS') }}</td>
+                    <td colspan="6">{{ lang('ZP_BANLIST_NO_RESULTS') }}</td>
                 </tr>
                 {% endif %}
 
@@ -146,6 +157,15 @@
                         </span>
                         {% endif %}
                     </td>
+                    <td data-label="{{ lang('ZP_BANLIST_COL_LAST_POST') }}">
+                        {% if ban.U_LAST_POST_LINK %}
+                        <a href="{{ ban.U_LAST_POST_LINK }}" title="{{ lang('ZP_BANLIST_VIEW_LAST_POST_TITLE') }}" target="_blank">
+                            {{ ban.LAST_POST_DISPLAY }}
+                        </a>
+                        {% else %}
+                        <span style="color:#888;">—</span>
+                        {% endif %}
+                    </td>
                     {% if S_ZP_BANLIST_EDIT %}
                     <td class="zp-action-cell" data-label="">
                         <a href="#" title="{{ lang('ZP_BANLIST_EDIT_REASON_TITLE') }}" class="zp-edit-btn"
@@ -159,7 +179,7 @@
                 </tr>
                 {% if S_ZP_BANLIST_EDIT %}
                 <tr class="zp-edit-row" id="edit-row-{{ ban.BAN_ID }}" style="display:none;">
-                    <td colspan="6" class="zp-edit-inline">
+                    <td colspan="7" class="zp-edit-inline">
                         <div class="zp-edit-form">
                             <div class="zp-edit-fields">
                                 <div class="zp-edit-field">

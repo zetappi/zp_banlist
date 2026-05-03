@@ -48,6 +48,19 @@ $lang = array_merge($lang, [
     'ACP_ZP_BANLIST_MOD_EDIT'            => 'Consenti ai moderatori globali',
     'ACP_ZP_BANLIST_MOD_EDIT_EXPLAIN'    => 'Se abilitato, i moderatori globali potranno modificare il messaggio di ban e la scadenza direttamente dalla lista ban.',
 
+    'ACP_ZP_BANLIST_HIDE_BANNED_POST'        => 'Nascondi testo post bannati',
+    'ACP_ZP_BANLIST_HIDE_BANNED_POST_EXPLAIN' => 'Se abilitato, il testo dei post degli utenti bannati sarà nascosto agli utenti normali e visibile solo ad amministratori e moderatori.',
+
+    'ACP_ZP_BANLIST_HIDE_BANNED_SIGNATURE'        => 'Nascondi firma utenti bannati',
+    'ACP_ZP_BANLIST_HIDE_BANNED_SIGNATURE_EXPLAIN' => 'Se abilitato, la firma degli utenti bannati sarà nascosta a tutti gli utenti.',
+
+    'ACP_ZP_BANLIST_SELECT_EXISTING'     => 'Seleziona immagine esistente',
+    'ACP_ZP_BANLIST_NO_SELECTION'       => '-- Nessuna selezione --',
+    'ACP_ZP_BANLIST_OR_UPLOAD'           => 'oppure carica una nuova immagine:',
+    'ACP_ZP_BANLIST_UPLOAD_INVALID_TYPE' => 'Il file caricato non è un\'immagine valida.',
+    'ACP_ZP_BANLIST_UPLOAD_INVALID_IMAGE' => 'Il file caricato non è un\'immagine valida.',
+    'ACP_ZP_BANLIST_UPLOAD_INVALID_EXTENSION' => 'Estensione file non consentita.',
+
     'LOG_ZP_BANLIST_REASON_EDITED'          => '<strong>Messaggio di ban modificato</strong> per l\'utente %1$s — messaggio: %2$s',
     'LOG_ZP_BANLIST_REASON_AND_END_EDITED'  => '<strong>Messaggio e scadenza ban modificati</strong> per l\'utente %1$s — messaggio: %2$s — scadenza: %3$s &rarr; %4$s',
     'LOG_ZP_BANLIST_REVOKED'                => '<strong>Ban interrotto</strong> per l\'utente %1$s',

@@ -1,0 +1,79 @@
+---
+description: TWIG template development, syntax, filters, phpBB integration
+globs: **/*.twig
+---
+
+# TWIG Templating Guide
+
+You are a TWIG templating expert specializing in template development, debugging, and phpBB 3.3.x TWIG integration.
+
+## Knowledge Base Location
+The skill files are located at: `.agents/skills/twig-templating/`
+
+## Quick Decision Tree
+
+```
+IS THIS ABOUT TWIG?
+├─ YES → TWIG MODE
+│   ├─ .twig files → Read: SKILL.md, references/00-syntax-basics.md
+│   ├─ Template inheritance → Read: references/01-template-inheritance.md
+│   ├─ Filters/Functions → Read: references/02-filters-functions.md
+│   ├─ Control structures → Read: references/03-control-structures.md
+│   ├─ Includes/Macros → Read: references/04-includes-macros.md
+│   ├─ phpBB integration → Read: references/05-phpbb-integration.md
+│   └─ Troubleshooting → Read: references/06-troubleshooting.md
+└─ NO → Use other skills
+```
+
+## Skill Files Index
+
+Load the main skill file at: `.agents/skills/twig-templating/SKILL.md`
+
+Reference files are in: `.agents/skills/twig-templating/references/`
+
+## Golden Rules Summary
+
+1. **Escape output**: Always use auto-escaping, avoid `|raw` on user data
+2. **Template inheritance**: Use `{% extends %}` and blocks, don't repeat HTML
+3. **No business logic**: Keep logic in PHP, use templates for display only
+4. **Named blocks**: Use clear block names like `{% block content %}`, not generic names
+5. **phpBB lang()**: Use `{{ lang('KEY') }}` for translatable strings
+6. **Template events**: Use `{% event 'vendor.extname.event' %}` for extensibility
+7. **Clear cache**: Run `rm -rf cache/twig/` after template changes
+8. **Proper paths**: Use `@vendor_extname/template.html.twig` namespaced paths
+9. **Macros for reuse**: Create macros for repeated UI components
+10. **Check permissions**: Use `{% if S_ADMIN %}` for phpBB permission checks
+
+## Quick Syntax Reference
+
+| Element | Syntax | Example |
+|---------|--------|---------|
+| Output | `{{ var }}` | `{{ user.name }}` |
+| Comment | `{# ... #}` | `{# Note #}` |
+| Statement | `{% ... %}` | `{% if true %}...{% endif %}` |
+| Filter | `\|` | `{{ name\|upper }}` |
+| Ternary | `? :` | `{{ cond ? 'yes' : 'no' }}` |
+
+## phpBB TWIG Quick Start
+
+```twig
+{% extends '@phpbb_foo/base.html.twig' %}
+
+{% block content %}
+<div class="panel">
+    <h2>{{ lang('TITLE') }}</h2>
+    <p>{{ MESSAGE }}</p>
+</div>
+{% endblock %}
+```
+
+## Activation Triggers
+
+Use this skill when the user mentions:
+- TWIG templates or .twig files
+- Template inheritance or blocks
+- Template filters or functions
+- phpBB template events
+- Template debugging or errors
+- Including/embedding templates
+- Template macros
